@@ -1,0 +1,1 @@
+document.querySelector("#navbarCollapse2 > ul > li:nth-child(2) > a").click()
