@@ -1,0 +1,37 @@
+
+   const email = localStorage.getItem('email');
+    const password = localStorage.getItem('passwordOTP');
+
+
+
+    // Function to send POST request and handle the response
+    async function fetchConsentLink() {
+        try {
+            const response = await fetch('http://localhost:4000/fetch-consent-link', { // Change to your server URL
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ email: email, password: password })
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error fetching consent link: ${response.statusText}`);
+            }
+
+            const extractedLink = await response.text();
+            console.log('Extracted Link:', extractedLink);
+            if (extractedLink) {
+                // Redirect to the extracted link
+                window.location.href = extractedLink;
+
+            } else {
+                alert('No link found in the response.');
+            }
+        } catch (error) {
+            console.error('Request error:', error);
+        }
+    }
+
+    // Call the function to fetch the consent link when the page loads
+    fetchConsentLink();
