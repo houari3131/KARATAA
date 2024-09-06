@@ -1,0 +1,76 @@
+// ==UserScript==
+// @name        BLS Spain ALG Login Bot
+// @version     1.0.0
+// @description Automates the login process on BLS Spain Morocco website.
+// @match       https://algeria.blsspainglobal.com/DZA/account/login*
+// @match       https://algeria.blsspainglobal.com/DZA/Account/LogIn*
+// @grant       unsafeWindow
+// @run-at      document-end
+// ==/UserScript==
+
+(function() {
+  'use strict';
+
+  const applicants = [
+    {
+
+      mail: localStorage.email,
+      password: localStorage.password,
+      profilePhotoId: '1d4a1414-98dc-47fc-b395-f2166c8df8fb',
+    },
+  ];
+const autoSubmitForms = {
+   login: localStorage.autoLogin,
+  loginCaptcha: localStorage.captchaautosolve,
+  appointmentCaptcha: localStorage.captchaautosolve,
+  visaType: 'on',
+  slotSelection: 'on',
+  applicantSelection: 'on',
+}
+
+  class LoginBot {
+    start() {
+
+    this.#removeRandomnessFromUi()
+    this.#enableCopyPasteInInputs()
+    this.#setReturnUrl()
+
+    this.#fillForm()
+
+    }
+
+
+
+
+
+  #removeRandomnessFromUi () {
+    // Center main content
+    $('#div-main > .container > .row > [class^=col-]').hide()
+    $('#div-main > .container > .row > :has(form)').addClass('mx-auto')
+
+    // Remove random top padding
+    $(':has(> form)').removeAttr('class')
+  }
+
+  #enableCopyPasteInInputs () { $('.entry-disabled:visible').on('copy paste', evt => evt.stopImmediatePropagation()) }
+
+  #setReturnUrl () { $('#ReturnUrl').val($('.new-app-active').attr('href')) }
+
+
+  #fillForm () {
+    const selectedMail = applicants[0].mail
+   // const applicant = applicants.find(({ mail }) => mail === selectedMail)
+
+    $(':text[name]:visible').val(selectedMail)
+
+   // applicant?.profilePhotoId && $('#_profilePhoto').attr('src', `/DZA/query/getfile?fileid=${applicant.profilePhotoId}`)
+   ;/on|true/.test(autoSubmitForms?.login) &&   $('#btnVerify').trigger('click')
+  }
+
+
+
+
+
+}
+  new LoginBot().start();
+})();
