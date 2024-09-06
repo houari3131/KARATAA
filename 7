@@ -1,0 +1,180 @@
+// ==UserScript==
+// @name        BLS Spain ALG slot selction
+// @version     1.0.0
+// @description Automates the captcha solving on BLS Spain Morocco appointment page.
+// @match       https://algeria.blsspainglobal.com/DZA/Appointment/SlotSelection?data*
+// @match       https://algeria.blsspainglobal.com/DZA/Appointment/SlotSelection?data*
+// @grant       unsafeWindow
+// @run-at      document-end
+// ==/UserScript==
+
+
+(function() {
+    'use strict';
+      const autoSubmitForms = {
+  login: localStorage.autoLogin,
+  loginCaptcha: localStorage.captchaautosolve,
+  appointmentCaptcha: localStorage.captchaautosolve,
+  visaType: localStorage.isEnabled,
+  slotSelection: localStorage.getItem('Auto Select Date'),
+  applicantSelection: 'on',
+}
+      const global = typeof unsafeWindow !== 'undefined' ? unsafeWindow : window;
+
+function random (lower, upper) { return lower + Math.floor(Math.random() * (upper - lower + 1)) }
+function shuffleArray (array) {
+  let index = -1
+  const length = array.length
+  const lastIndex = length - 1
+  while (++index < length) {
+    const rand = random(index, lastIndex)
+    ;[array[index], array[rand]] = [array[rand], array[index]]
+  }
+  return array
+}
+
+
+    function sendMessage1(text) {
+        var temsg=  "BLS ON MAROC   :"+text;
+        const msg = encodeURIComponent(temsg +" ON")
+
+       //   fetch('https://api.telegram.org/bot7373477501:AAFrSLeWYaKL3kFbch-38rlAjj6AwVCf00k/sendMessage?chat_id=-1002182656332&text='+msg);
+        }
+
+
+    function sendMessage2(text) {
+        var temsg=  "BLS ON MAROC   :"+"\n"+text;
+        const msg = encodeURIComponent(temsg +" ON")
+
+       //   fetch('https://api.telegram.org/bot7313056674:AAEIivyB_ADYOQwDDT6Mx_dJBJOQjq0Fe9s/sendMessage?chat_id=-1002186788637&text='+msg);
+        }
+
+//----------------------------------------------------------------
+
+function notify()
+{
+    var categoryIdfff = localStorage.CatValueNotify
+    var locationIdfff =  localStorage.LocValueNotify
+    var visasubTypeff = localStorage.VisaSubTypeValueNotify
+    var data = availDates;
+   var  allowedDatesx = data.ad;
+   if (allowedDatesx !== null && allowedDatesx.length > 0) {
+                    const available = allowedDatesx.filter(x => x.AppointmentDateType === 0);
+                    if (available === null || available.length<1)
+                    {
+                      appDatex.enable(true);
+                     // datevide=true;
+                        return false;
+                    }
+                var teeBoot ="";
+                var dateArr=[];
+                var dateArr2;
+                $.each(available, function (index, value) {
+                    dateArr.push(value.DateText);
+                     dateArr2 = value.DateText;
+                     teeBoot=teeBoot+" "+value.DateText;
+                });
+                ShowError(teeBoot);
+
+                      sendMessage1(locationIdfff+ "\n" + categoryIdfff + "\n"+ visasubTypeff + "\n" +teeBoot);
+                sendMessage2(locationIdfff+ "\n" + categoryIdfff + "\n"+ visasubTypeff + "\n" +teeBoot);
+
+
+
+    }
+
+}
+notify();
+
+
+
+
+class SlotSelectionBot {
+  start () {
+    console.log(`${this.constructor.name} started`)
+
+    this.#removeRandomnessFromUi()
+    Object.assign(global, {
+      OnAppointmentdateChange: () => this.#getAvailableSlotTimes(),
+    })
+      if(localStorage.getItem('Auto Select Date') == 'true'){
+    this.#selectSlot()}
+  }
+
+
+  #removeRandomnessFromUi () {
+    // Center main content
+    $('#div-main > :is(:first-child, :last-child)').removeClass().hide()
+    $('#div-main > :has(form)').addClass('mx-auto')
+
+    // Remove random vertical margin
+    $('form > div:nth-child(2)')
+      .addClass('gap-4')
+      .children('div')
+      .removeClass((_, className) => className.match(/m[tb]-\d/g))
+
+    $('div:has(> #btnSubmit)').addClass('mt-5')
+  }
+
+  #selectSlot () {
+    $(() => {
+      const allowedDates = global.availDates.ad.filter(it => it.AppointmentDateType === 0)
+      const selectedDate = shuffleArray(allowedDates).at(random(0, allowedDates.length - 1))
+      if (selectedDate) {
+          const datePicker = $('.k-datepicker:visible .k-input').data('kendoDatePicker')
+          datePicker.value(selectedDate.DateText)
+          datePicker.trigger('change')
+              }
+    })
+  }
+
+  #getAvailableSlotTimes () {
+    const apptDate = $('.k-datepicker:visible .k-input').val()
+    const slotDropDown = $('.k-dropdown:visible > .form-control').data('kendoDropDownList')
+    if (!apptDate) {
+      slotDropDown.value(undefined)
+      slotDropDown.setDataSource([])
+      // slotDropDown.enable(false)
+      return false
+    }
+    global.ShowLoader()
+    const that = this
+    $.ajax({
+      type: 'POST',
+      url: `/DZA/appointment/GetAvailableSlotsByDate?data=${encodeURIComponent(new URLSearchParams(location.search).get('data'))}&appointmentDate=${apptDate}`,
+      dataType: 'json',
+      success (data) {
+        if (data.success) {
+          that.#selectSlotTime(global.slotDataSource = data.data)
+        } else {
+          global.ShowError(data.err)
+          data.ru && global.confirm(`You will be redirected to: ${data.ru}`) && global.location.replace(data.ru)
+        }
+      },
+      complete () {
+        global.HideLoader()
+      }
+    })
+  }
+
+  #selectSlotTime (slots) {
+    const availableSlots = slots.filter(s => s.Count > 0)
+    let selectedSlot = shuffleArray(availableSlots).at(random(0, availableSlots.length - 1))
+    availableSlots.forEach(s => s.Count > selectedSlot.Count && (selectedSlot = s))
+    if (selectedSlot) {
+      speechSynthesis.speak(new SpeechSynthesisUtterance('Appointment slot available !!!'))
+
+      const slotDropDown = $('.k-dropdown:visible > .form-control').data('kendoDropDownList')
+      slotDropDown.setDataSource(slots)
+      slotDropDown.value(selectedSlot.Id)
+
+      ;/on|true/.test(autoSubmitForms?.slotSelection) && $(() => $('#btnSubmit').trigger('click'))
+    }
+  }
+}
+
+
+
+   new  SlotSelectionBot().start();
+
+})();
