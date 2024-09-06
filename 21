@@ -32,7 +32,7 @@ function regestr() {
    }
    
     if( PassportIssuePlaceLocaStotrage == 'true'){
-        document.querySelector("#IssuePlace").value = 'Morocco';
+        document.querySelector("#IssuePlace").value = 'Algeria';
     }else{
     document.querySelector("#IssuePlace").value = localStorage.PassportIssuePlace;
     }
