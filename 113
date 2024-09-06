@@ -1,0 +1,96 @@
+
+(function() {
+    'use strict';
+
+    // Create a container for the timer, checkbox, and input
+    var timerContainer = document.createElement("div");
+    timerContainer.style.display = "inline-block";
+    timerContainer.style.padding = "40px 40px";
+    timerContainer.style.backgroundColor = "#ff6f6f";  // Match the button color
+    timerContainer.style.borderRadius = "40px";  // Rounded corners
+    timerContainer.style.boxShadow = "0px 10px 12px rgba(0, 0, 0, 0.1)";  // Soft shadow
+    timerContainer.style.color = "#fff";  // White text
+    timerContainer.style.fontWeight = "bold";
+    timerContainer.style.fontSize = "16px";
+    timerContainer.style.textAlign = "center";
+    timerContainer.style.marginLeft = "10px";  // Margin for spacing
+
+    // Create a span to show the countdown
+    var timerDisplay = document.createElement("span");
+    timerDisplay.style.marginRight = "20px";
+    timerDisplay.textContent = "6 seconds";  // Default text
+    timerContainer.appendChild(timerDisplay);
+
+    // Create an input to adjust the time
+    var timeInput = document.createElement("input");
+    timeInput.type = "number";
+    timeInput.value = localStorage.getItem('timerDuration') || 6; // Initial time from local storage or default to 6 seconds
+    timeInput.style.width = "90px";
+    timeInput.style.border = "none";
+    timeInput.style.borderRadius = "70px";
+    timeInput.style.textAlign = "center";
+    timeInput.style.padding = "9px";
+    timeInput.style.color = "#ff6f6f";  // Match the button color for input text
+    timerContainer.appendChild(timeInput);
+
+    // Create a checkbox to control whether the button click is enabled
+    var checkboxLabel = document.createElement("label");
+    checkboxLabel.style.marginLeft = "40px";
+    checkboxLabel.style.fontSize = "24px";
+
+    var clickCheckbox = document.createElement("input");
+    clickCheckbox.type = "checkbox";
+    clickCheckbox.style.marginRight = "25px";
+    clickCheckbox.checked = localStorage.getItem('clickEnabled') === 'true'; // Load the checkbox state from local storage
+
+    checkboxLabel.appendChild(clickCheckbox);
+    checkboxLabel.appendChild(document.createTextNode("Enable button click"));
+    timerContainer.appendChild(checkboxLabel);
+
+    // Append the container to the desired location
+    var parentElement = document.querySelector("#div-main > div:nth-child(2)");
+    if (parentElement) {
+        parentElement.appendChild(timerContainer);
+    }
+
+    var timer; // Declare the timer variable outside the function for control
+
+    // Function to start the timer
+    function startTimer(duration) {
+        clearInterval(timer); // Clear any previous timers
+        var timeRemaining = duration;
+
+        timer = setInterval(function() {
+            timerDisplay.textContent = timeRemaining + " seconds";
+            timeRemaining--;
+
+            if (timeRemaining < 0) {
+                clearInterval(timer);
+                if (clickCheckbox.checked) {
+                    document.querySelector("#div-main > div:nth-child(2) > a").click();
+                }
+            }
+        }, 1000);
+    }
+
+    // Start the timer with the initial value
+    startTimer(parseInt(timeInput.value));
+
+    // Update the timer and save the value to local storage when the input value changes
+    timeInput.addEventListener("change", function() {
+        var newTime = parseInt(timeInput.value);
+        localStorage.setItem('timerDuration', newTime); // Save the new time to local storage
+        startTimer(newTime);
+    });
+
+    // Save the checkbox state to local storage when it changes
+    clickCheckbox.addEventListener("change", function() {
+        localStorage.setItem('clickEnabled', clickCheckbox.checked);
+        if (!clickCheckbox.checked) {
+            clearInterval(timer); // Stop the timer if the checkbox is unchecked
+        } else {
+            startTimer(parseInt(timeInput.value)); // Restart the timer if the checkbox is checked
+        }
+    });
+
+})();
