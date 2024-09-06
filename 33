@@ -1,0 +1,10 @@
+
+   let ThankYou = setInterval(function() {
+                   var GreenAlert = document.querySelector("body > main > div > div > div > div > p")
+                    if (GreenAlert) {
+            const isVisible = !!(GreenAlert.offsetWidth || GreenAlert.offsetHeight || GreenAlert.getClientRects().length);
+            if (isVisible) {
+document.querySelector("#navbarCollapse2 > ul > li:nth-child(2) > a").click();
+
+clearInterval(ThankYou)
+}}},500);
