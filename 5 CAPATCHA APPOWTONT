@@ -1,0 +1,138 @@
+// ==UserScript==
+// @name        BLS Spain ALG Appointment Captcha Bot
+// @version     1.0.0
+// @description Automates the captcha solving on BLS Spain Morocco appointment page.
+// @match       https://algeria.blsspainglobal.com/DZA/Appointment/AppointmentCaptcha*
+// @match       https://algeria.blsspainglobal.com/DZA/appointment/appointmentcaptcha*
+// @match       https://www.blsspainmorocco.net/MAR/Captcha/GenerateCaptcha?data*
+// @grant       unsafeWindow
+// @run-at      document-end
+// ==/UserScript==
+
+(function() {
+    'use strict';
+
+  const captcha = {
+    enabled: 'true',
+    apiKey: 'oosama-4969aa18-0a4a-0746-e216-a9c0d54ddd21',
+  };
+
+
+    const autoSubmitForms = {
+  login: localStorage.autoLogin,
+  loginCaptcha: localStorage.captchaautosolve,
+  appointmentCaptcha: localStorage.captchaautosolve,
+  visaType: 'on',
+  slotSelection: 'on',
+  applicantSelection: 'on',
+}
+class AppointmentCaptchaBot {
+  start () {
+    console.log(`${this.constructor.name} started`)
+
+    this.#removeRandomnessFromUi()
+    this.#solveCaptcha()
+  }
+
+
+
+
+
+  #removeRandomnessFromUi () {
+    // Center main content
+    $('.row:has(> .captcha-div) > [class^=col-]').hide()
+    $('.captcha-div').addClass('mx-auto')
+  }
+
+  #solveCaptcha () {
+    if (!(/on|true/.test(captcha.enabled) && captcha.apiKey)) return
+
+    const target = this.#getCaptchaTarget()
+    const grid = this.#getCaptchaGrid()
+
+    const extractCaptchaGridData = grid => Object.fromEntries(grid.map(img => img.src).entries())
+
+    const onSuccess = result => {
+      if (result.status === 'solved') {
+        // Apply solution
+        Object.entries(result.solution).forEach(([index, value]) => value === target && grid[index].click())
+        // Auto submit
+        ;/on|true/.test(autoSubmitForms?.appointmentCaptcha) && $('#btnVerify').trigger('click')
+      } else {
+        onError('captchaerror', result)
+      }
+    }
+    const onError = (type, data) => {
+      console.error(type, data)
+      $('.validation-summary-valid').html('<b>Failed to solve captcha.</b>')
+    }
+
+		$.post({
+			url: 'https://pro.nocaptchaai.com/solve',
+			headers: { apiKey: captcha.apiKey },
+			contentType: 'application/json',
+			dataType: 'json',
+			data: JSON.stringify({
+				method: 'ocr',
+				id: 'morocco',
+				images: extractCaptchaGridData(grid),
+			}),
+      timeout: 30_000,
+
+			complete (xhr, state) {
+				this._loading?.remove()
+
+				switch (state) {
+					case 'success':
+						onSuccess(xhr.responseJSON)
+						break
+					case 'error':
+					case 'parsererror':
+						onError(state, xhr)
+						break
+				}
+			},
+		})
+  }
+
+  #getCaptchaTarget () {
+    return $('.box-label')
+      .sort((a, b) => getComputedStyle(b).zIndex - getComputedStyle(a).zIndex)
+      .first()
+      .text()
+      .replace(/\D+/, '')
+  }
+
+  #getCaptchaGrid () {
+    // From top-to-bottom and left-to-right
+    return $(':has(> .captcha-img):visible').get()
+      // Group by top position
+      .reduce((acc, cur) => {
+        (acc[Math.floor(cur.offsetTop)] ??= []).push(cur)
+        return acc
+      }, [])
+      .flatMap(sortedByTop => {
+        const sortedByZIndex = sortedByTop.sort((a, b) => getComputedStyle(b).zIndex - getComputedStyle(a).zIndex)
+        const top3 = sortedByZIndex.slice(0, 3) // max cells
+        const sortedByLeft = top3.sort((a, b) => a.offsetLeft - b.offsetLeft)
+        return sortedByLeft
+      })
+      .map(element => element.firstElementChild)
+  }
+}
+
+
+
+
+new AppointmentCaptchaBot().start();
+
+
+
+
+
+
+
+
+
+
+})();
