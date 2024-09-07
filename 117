@@ -29,6 +29,7 @@ var VersionType = localStorage.versiontype || "New";
         
  { includes: '/VisaType?data', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9']},
 { includes: 'visatype?data', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9']},
+{ includes: 'Appointment/visatype', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9']},
         
 
 
