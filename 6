@@ -9,10 +9,6 @@
 // @grant        none
 // ==/UserScript==
 
-
-
-
-if(localStorage.selfie == 'true'){
 var Client = {
     familyOfMembers: localStorage.getItem('familyOfMembers'),
     location: localStorage.getItem('location'),
@@ -21,142 +17,102 @@ var Client = {
     visaSubtype: localStorage.getItem('visaSubtype')
 };
 
-
-       var CategoryId,
-           LocationId,
-           VisaTypeId,
-           VisaSubTypeId,
-           IndivId,
-           FamilyId,
-           IndivElmnt,
-           FamilyElmnt
+var CategoryId,
+    LocationId,
+    VisaTypeId,
+    VisaSubTypeId,
+    IndivId,
+    FamilyId,
+    IndivElmnt,
+    FamilyElmnt;
 
 function extractIdsFromText(text) {
-    // Regular expression to match the pattern: $("#<id>")
     const regex = /\$\("#(\w+)"\)/g;
-
-    // Array to hold all matched IDs
     let ids = [];
-
-    // Variable to store the current match
     let match;
-
-    // Iterate over all matches
     while ((match = regex.exec(text)) !== null) {
-        // Add the captured group (which is the ID) to the ids array
         ids.push(match[1]);
     }
-
     return ids;
 }
 
-const fnct= OnSubmitVisaType.toString()
- var IdArray = extractIdsFromText(fnct);
-var IdArray2 = extractIdsFromText(fnct);
+const fnct = OnSubmitVisaType.toString();
+var IdArray = extractIdsFromText(fnct);
 console.log(IdArray);
 
-
-
-
-    for (let i = 0; i < IdArray.length; i++) {
+for (let i = 0; i < IdArray.length; i++) {
     if (IdArray[i].startsWith('an')) {
-        // Remove 'an' prefix and update the variable in the array
         let modifiedVariable = IdArray[i].slice(2);
-        IdArray[i] = modifiedVariable  // Add the modified variable back to the array
+        IdArray[i] = modifiedVariable;
     }
 }
-    console.log(IdArray);
+console.log(IdArray);
 
-
-
-
-
-
-
-
-
-    for(let i=0 ; i<25 ;i++){
-
-  if ($("#" + IdArray[i] + '_label').is(":visible")) {
-
-  console.log(IdArray[i])
-
-      if(document.querySelector("#" + IdArray[i] + "_label").textContent == 'Category*'){
-          $("#" + IdArray[i]).click();
-          CategoryId = IdArray[i];
-         $("#"+CategoryId+"_listbox >.k-item:contains("+Client.category +")").click();
-      }
-      if(document.querySelector("#" + IdArray[i] + "_label").textContent == 'Location*'){
-                    $("#" + IdArray[i]).click();
-
-          LocationId = IdArray[i];
-                     $("#"+LocationId+"_listbox >.k-item:contains("+Client.location+")").click();
-
-
-      }
-      if(document.querySelector("#" + IdArray[i] + "_label").textContent == 'Visa Type*'){
-                    $("#" + IdArray[i]).click();
-          VisaTypeId = IdArray[i];
-         $("#"+VisaTypeId+"_listbox>.k-item:contains(" + Client.visatype + ")").click();
-
-      }
-      if(document.querySelector("#" + IdArray[i] + "_label").textContent == 'Visa Sub Type*'){
-                    $("#" + IdArray[i]).click();
-
-          VisaSubTypeId = IdArray[i];
-                    $("#"+VisaSubTypeId+"_listbox>.k-item:contains("+Client.visaSubtype+")").click();
-
-      }
-
-
-  }}
-
-   for (let i = 0; i < IdArray.length; i++) {
-if($("#self" + IdArray[i]).is(":visible")){
-   console.log("#self" + IdArray[i])
-    IndivId =  IdArray[i];
-    IndivElmnt = $("#self" + IdArray[i]);
-}
-    if($("#family" + IdArray[i]  ).is(":visible")){
-
-
-        console.log("#family" + IdArray[i])
-    FamilyId = IdArray[i];
-    FamilyElmnt = $("#family" + IdArray[i]);
-
-}
-}
-   if (Client.familyOfMembers > 1) {
-            FamilyElmnt.click();
-            setTimeout(() => {
-                $("#an" + FamilyId).click();
-                window.location.href = `javaScript: OnFamilyAccept();`;
-            }, 500);
-        setTimeout(() => {
-             $("#an" + FamilyId).click();
-              //$("#an" + FamilyId + "_listbox>.k-item:contains(" + Client.familyOfMembers + " Members)").click();
-
-            }, 700);
-
-             setTimeout(() => {
-           //  $("#an" + FamilyId).click();
-              $("#an" + FamilyId + "_listbox>.k-item:contains(" + Client.familyOfMembers + " Members)").click();
-
-            }, 900);
-
-
+for (let i = 0; i < 25; i++) {
+    if ($("#" + IdArray[i] + '_label').is(":visible")) {
+        if (document.querySelector("#" + IdArray[i] + "_label").textContent == 'Category*') {
+            $("#" + IdArray[i]).click();
+            CategoryId = IdArray[i];
+            $("#" + CategoryId + "_listbox > .k-item:contains(" + Client.category + ")").click();
         }
-  // Existing code to show the error and submit the form
-        window.location.href = `javaScript:ShowError( 'لا تظغط على الزر الفورباس خدام')`;
-  var isEnabled = localStorage.getItem('isEnabled') === 'true';
+        if (document.querySelector("#" + IdArray[i] + "_label").textContent == 'Location*') {
+            $("#" + IdArray[i]).click();
+            LocationId = IdArray[i];
+            $("#" + LocationId + "_listbox > .k-item:contains(" + Client.location + ")").click();
+        }
+        if (document.querySelector("#" + IdArray[i] + "_label").textContent == 'Visa Type*') {
+            $("#" + IdArray[i]).click();
+            VisaTypeId = IdArray[i];
+            $("#" + VisaTypeId + "_listbox > .k-item:contains(" + Client.visatype + ")").click();
+        }
+        if (document.querySelector("#" + IdArray[i] + "_label").textContent == 'Visa Sub Type*') {
+            $("#" + IdArray[i]).click();
+            VisaSubTypeId = IdArray[i];
+            $("#" + VisaSubTypeId + "_listbox > .k-item:contains(" + Client.visaSubtype + ")").click();
+        }
+    }
+}
+
+for (let i = 0; i < IdArray.length; i++) {
+    if ($("#self" + IdArray[i]).is(":visible")) {
+        IndivId = IdArray[i];
+        IndivElmnt = $("#self" + IdArray[i]);
+    }
+    if ($("#family" + IdArray[i]).is(":visible")) {
+        FamilyId = IdArray[i];
+        FamilyElmnt = $("#family" + IdArray[i]);
+    }
+}
+
+if (Client.familyOfMembers > 1) {
+    FamilyElmnt.click();
+    setTimeout(() => {
+        $("#an" + FamilyId).click();
+        window.location.href = `javaScript: OnFamilyAccept();`;
+    }, 500);
+    setTimeout(() => {
+        $("#an" + FamilyId).click();
+    }, 700);
+    setTimeout(() => {
+        $("#an" + FamilyId + "_listbox > .k-item:contains(" + Client.familyOfMembers + " Members)").click();
+    }, 900);
+}
+
+// Check if all required fields are filled before submitting
+function allFieldsFilled() {
+    return CategoryId && LocationId && VisaTypeId && VisaSubTypeId;
+}
+
+// Automatically submit the form when all fields are filled
+if (allFieldsFilled()) {
+    var isEnabled = localStorage.getItem('isEnabled') === 'true';
     if (isEnabled) {
-        var slmval = setInterval(function() {
+        var slmval = setInterval(function () {
             var btnSubmit = document.querySelector("#btnSubmit");
             if (btnSubmit && !btnSubmit.disabled) {  // Check if the button exists and is not disabled
                 btnSubmit.click();
                 clearInterval(slmval);
             }
-        }, 2000);
-         }}
-
-
+        }, 100);
+    }
+}
