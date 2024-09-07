@@ -34,7 +34,7 @@ var VersionType = localStorage.versiontype || "New";
 
 
 { includes: 'NewAppointment?msg', urls: ['http://localhost:4000/fetch-script/113']},
-{ includes: 'newappointment', urls: ['http://localhost:4000/fetch-script/113']},
+//{ includes: 'newappointment', urls: ['http://localhost:4000/fetch-script/113']},
 
 
 //{ includes: 'ApplicantSelection', urls: ['http://localhost:4000/fetch-script/10','http://localhost:4000/fetch-script/11',,'http://localhost:4000/fetch-script/23','http://localhost:4000/fetch-script/24','http://localhost:4000/fetch-script/26','http://localhost:4000/fetch-script/112','http://localhost:4000/fetch-script/39']},
