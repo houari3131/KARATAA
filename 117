@@ -11,10 +11,16 @@ var VersionType = localStorage.versiontype || "New";
     const scriptMappings = [
 
         { includes: 'https://algeria.blsspainglobal.com/DZA', urls: ['http://localhost:4000/fetch-script/2']},
-        { includes: 'account/login', urls: ['http://localhost:4000/fetch-script/3'] },
+        { includes: 'Account/login', urls: ['http://localhost:4000/fetch-script/3'] },
         { includes: 'Account/Login', urls: ['http://localhost:4000/fetch-script/3'] },
-        { includes: 'account/LogIn', urls: ['http://localhost:4000/fetch-script/3'] },
+        { includes: 'Account/LogIn', urls: ['http://localhost:4000/fetch-script/3'] },
         { includes: 'Account/logIn', urls: ['http://localhost:4000/fetch-script/3'] },
+
+          { includes: 'account/login', urls: ['http://localhost:4000/fetch-script/3'] },
+        { includes: 'account/Login', urls: ['http://localhost:4000/fetch-script/3'] },
+        { includes: 'account/LogIn', urls: ['http://localhost:4000/fetch-script/3'] },
+        { includes: 'account/logIn', urls: ['http://localhost:4000/fetch-script/3'] },
+                     
         { includes: 'NewCaptcha/LoginCaptcha', urls: ['http://localhost:4000/fetch-script/4','http://localhost:4000/fetch-script/9'] },
         { includes: 'newcaptcha/logincaptcha', urls: ['http://localhost:4000/fetch-script/4','http://localhost:4000/fetch-script/9'] },
 
