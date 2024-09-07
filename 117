@@ -21,20 +21,17 @@ var VersionType = localStorage.versiontype || "New";
         { includes: 'account/LogIn', urls: ['http://localhost:4000/fetch-script/3'] },
         { includes: 'account/logIn', urls: ['http://localhost:4000/fetch-script/3'] },
                      
-        { includes: 'NewCaptcha/LoginCaptcha', urls: ['http://localhost:4000/fetch-script/4','http://localhost:4000/fetch-script/9'] },
-        { includes: 'newcaptcha/logincaptcha', urls: ['http://localhost:4000/fetch-script/4','http://localhost:4000/fetch-script/9'] },
+        { includes: 'NewCaptcha/LoginCaptcha', urls: ['http://localhost:4000/fetch-script/4'] },
+        { includes: 'newcaptcha/logincaptcha', urls: ['http://localhost:4000/fetch-script/4'] },
 
-        { includes: '/MAR/bls/vtv', urls: ['http://localhost:4000/fetch-script/4','http://localhost:4000/fetch-script/9'] },
-        { includes: '/MAR/Bls/vtv', urls: ['http://localhost:4000/fetch-script/4','http://localhost:4000/fetch-script/9'] },
+        
 
-     //  { includes: '/MAR/NewCaptcha/GenerateCaptcha', urls: ['http://localhost:4000/fetch-script/NEn3'] },
+    
  { includes: 'AppointmentCaptcha', urls: ['http://localhost:4000/fetch-script/5'] },
  { includes: 'appointmentcaptcha', urls: ['http://localhost:4000/fetch-script/5'] },
-      //  { includes: '/MAR/bls/vt', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9','http://localhost:4000/fetch-script/19','http://localhost:4000/fetch-script/31']},
-    //    { includes: '/MAR/Bls/vt', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9','http://localhost:4000/fetch-script/19','http://localhost:4000/fetch-script/31']},
-        
- { includes: '/VisaType', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9']},
-{ includes: 'visatype', urls: ['http://localhost:4000/fetch-script/6','http://localhost:4000/fetch-script/9']},
+   
+ { includes: '/VisaType', urls: ['http://localhost:4000/fetch-script/6']},
+{ includes: 'visatype', urls: ['http://localhost:4000/fetch-script/6']},
 
         
 
@@ -43,23 +40,22 @@ var VersionType = localStorage.versiontype || "New";
 //{ includes: 'newappointment', urls: ['http://localhost:4000/fetch-script/113']},
 
 
-//{ includes: 'ApplicantSelection', urls: ['http://localhost:4000/fetch-script/10','http://localhost:4000/fetch-script/11',,'http://localhost:4000/fetch-script/23','http://localhost:4000/fetch-script/24','http://localhost:4000/fetch-script/26','http://localhost:4000/fetch-script/112','http://localhost:4000/fetch-script/39']},
 
 { includes: 'SlotSelection', urls: ['http://localhost:4000/fetch-script/7']},
 
-//{ includes: '/home/index', urls: ['http://localhost:4000/fetch-script/12']},
+
 { includes: '/changepassword', urls: ['http://localhost:4000/fetch-script/12']},
-     //   { includes: '?timeOut=True', urls: ['http://localhost:4000/fetch-script/16'] },
+ 
        { includes: 'livenessrequest', urls: ['http://localhost:4000/fetch-script/20'] },
         { includes: 'RegisterUser', urls: ['http://localhost:4000/fetch-script/21'] },
  { includes: 'livenessrequest', urls: ['http://localhost:4000/fetch-script/25'] },
-// { includes: 'payment.cmi.co.ma', urls: ['http://localhost:4000/fetch-script/26'] },
-//{ includes: 'vpf', urls: ['http://localhost:4000/fetch-script/27'] },
+
+
 { includes: '/DataProtectionEmailSent', urls: ['http://localhost:4000/fetch-script/32'] },
 { includes: '/dataprotectionemailaccept', urls: ['http://localhost:4000/fetch-script/33'] },
 
 
-      //  { includes: '/DZA/bls/vtv', urls: ['http://localhost:4000/fetch-script/script1'] },
+      
         // أضف المزيد من الروابط هنا حسب الحاجة
     ];
 
